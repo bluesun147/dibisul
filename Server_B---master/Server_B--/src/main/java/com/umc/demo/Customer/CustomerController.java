@@ -16,11 +16,11 @@ public class CustomerController {
     @Autowired
     CustomerRepository customerRepository;
 
-/*    // 고객 등록
+    // 고객 등록
     @PostMapping()
     public List<Object> saveCustomer(String socialNumber, String name, String address, Date birthdate, String email, String phoneNumber, String job) {
         return customerRepository.saveCustomer(socialNumber, name, address, birthdate, email, phoneNumber, job);
-    }*/
+    }
 
     // 전체 고객 조회
     @GetMapping("/all")
@@ -29,8 +29,14 @@ public class CustomerController {
     }
 
     // 전체 고객 생일 조회
-    @GetMapping("/all/b")
+    @GetMapping("/all/birthday")
     public List<Date> getPosts2() { // list 타입 Customer로 안하고 그냥 Object해도 결고 나옴.
         return customerRepository.getAllCustomers2();
+    }
+
+    // 테스트 쿼리1
+    @GetMapping("/test")
+    public List<Object> test() { // list 타입 Customer로 안하고 그냥 Object해도 결고 나옴.
+        return customerRepository.test();
     }
 }

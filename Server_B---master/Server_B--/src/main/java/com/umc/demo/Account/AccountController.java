@@ -44,19 +44,47 @@ public class AccountController {
 
     // 특정 계좌 잔고 조회
     @GetMapping("/balance/{accountNumber}")
-    public List<Double> getAccounts2(@PathVariable("accountNumber") int accountNumber) {
+    public Double getAccountBalance(@PathVariable("accountNumber") int accountNumber) {
         return accountRepository.getAccountBalance(accountNumber);
     }
 
-/*    // 계좌 이체
-    @GetMapping("/transfer/{accountNumber1}/{accountNumber2}")
-    public void transfer(@PathVariable("accountNumber1") int accountNumber1, @PathVariable("accountNumber2") int accountNumber2) {
-        // accountRepository.plus(accountNumber1, accountNumber2);
+    // 입출금시 거래 테이블에도 데이터 들어가야 함.
+
+
+
+    // 입금
+    @GetMapping("/deposit")
+    public double deposit(
+            @RequestParam("deposit") double deposit,
+            @RequestParam("accountNumber") int accountNumber) {
+
+        double accountBalance = accountRepository.getAccountBalance(accountNumber);
+        double result = accountBalance + deposit;
+        accountRepository.deposit(result, accountNumber);
+
+        return accountRepository.getAccountBalance(accountNumber);
     }
 
-    // 테스트
-    @GetMapping("/xx")
-    public Object test(@PathVariable("accountNumber") int accountNumber) {
+    // 출금
+    @GetMapping("/withdraw")
+    public double withdraw(
+            @RequestParam("withdraw") double withdraw,
+            @RequestParam("accountNumber") int accountNumber) {
+
+        double accountBalance = accountRepository.getAccountBalance(accountNumber);
+        double result = accountBalance - withdraw;
+        accountRepository.withdraw(result, accountNumber);
+
         return accountRepository.getAccountBalance(accountNumber);
-    }*/
+    }
+
+    // 계좌 이체
+    @GetMapping("/transfer")
+    public void transfer(
+            @RequestParam("money") double money,
+            @RequestParam("accountNumber1") int accountNumber1,
+            @RequestParam("accountNumber2") int accountNumber2) {
+         this.withdraw(money, accountNumber1);
+         this.deposit(money, accountNumber2);
+    }
 }

@@ -1,6 +1,5 @@
 package com.umc.demo.post;
 
-import com.umc.demo.config.BaseException;
 import com.umc.demo.post.dto.PostDto;
 import com.umc.demo.post.dto.UpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +16,6 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public Optional<Post> getPostById(int post_id) throws BaseException {
-        return postRepository.findById(post_id);
-    }
 
     public List<Post> getPosts(String text) {
         // return postRepository.findAll();

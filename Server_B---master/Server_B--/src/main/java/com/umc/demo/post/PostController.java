@@ -1,6 +1,5 @@
 package com.umc.demo.post;
 
-import com.umc.demo.config.BaseException;
 import com.umc.demo.post.dto.PagingDto;
 import com.umc.demo.post.dto.PostDto;
 import com.umc.demo.post.dto.UpdateDto;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.umc.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,15 +29,6 @@ public class PostController {
         return postService.getPosts(text);
     }
 
-    // id로 포스트 하나 조회
-    @GetMapping("/{post_id}")
-    public Optional<Post> getPostById(@PathVariable int post_id) throws BaseException {
-        try {
-            return postService.getPostById(post_id);
-        } catch (BaseException exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 
     // 해당 유저의 모든 포스트 조회
     @GetMapping()
