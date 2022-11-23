@@ -10,15 +10,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface AccountRepository extends JpaRepository<Account, Integer>{
- // https://kitty-geno.tistory.com/118
-    // 고객 등록
-    @Query(value = "insert into Customer (socialNumber, name, birthdate, email, phoneNumber, job) values (:socialNumber, :name, :birthdate, :email, :phoneNumber, :job)", nativeQuery = true)
-    public List<Customer> saveCustomer(@Param("socialNumber") String socialNumber, String name, LocalDate birthdate, String email, String phoneNumber, String job);
+// <Account, Integer> 부분에 Account 안쓰면 List<Account>하면 오류나서 List<Object> 이런식으로 썼음
+public interface AccountRepository extends JpaRepository<Account, Integer> {
+    // https://kitty-geno.tistory.com/118
+    // 계좌 등록
+    @Query(value = "insert into Account (socialnumber, branchnumber, type, balance, cardappstatus) values (:socialNumber, :branchNumber, :type, :balance, :cardAppStatus)", nativeQuery = true)
+    public List<Customer> createAccount(
+            @Param("socialNumber") String socialNumber,// accountNumber라고 하면 account_number를 찾음
+            @Param("branchNumber") int branchNumber,
+            @Param("type") String type,
+            @Param("balance") double balance,
+            @Param("cardAppStatus") boolean cardAppStatus
+    );
 
-   // 모든 계좌 조회
-   @Query(value = "select * from Account", nativeQuery = true)
-   public List<Account> getAllAccounts();// 특정 사용자 계좌 조회();
+    // 모든 계좌 조회
+    @Query(value = "select * from Account", nativeQuery = true)
+    public List<Account> getAllAccounts();
 
     // 특정 사용자 계좌 조회
     @Query(value = "select * from Account where socialNumber = :socialNumber", nativeQuery = true)
@@ -34,15 +41,20 @@ public interface AccountRepository extends JpaRepository<Account, Integer>{
     @Modifying // 이거 붙여야 함.
     @Query(value = "update Account set balance = :result where accountNumber = :accountNumber", nativeQuery = true)
     public void deposit(@Param("result") double result, // void로 해도됨. List<Object>하면 오류
-                                 @Param("accountNumber") int accountNumber);
+                        @Param("accountNumber") int accountNumber);
 
     // 출금
     @Transactional
     @Modifying
     @Query(value = "update Account set balance = :result where accountNumber = :accountNumber", nativeQuery = true)
     public void withdraw(@Param("result") double result,
-                       @Param("accountNumber") int accountNumber);
+                         @Param("accountNumber") int accountNumber);
 
-    //@Query(value = "select balance from Account where accountNumber = :accountNumber", nativeQuery = true)
-    //public void transfer(@Param("accountNumber1") int accountNumber1, @Param("accountNumber2") int accountNumber2);// 특정 사용자 계좌 조회();
+    // 계좌에 연결된 카드 조회
+    @Query(value = "select * from CreditCard where accountNumber = :accountNumber", nativeQuery = true)
+    public List<Object> getCards(@Param("accountNumber") int accountNumber);
+
+    // 특정 브랜치에서 개설된 계좌 조회
+    @Query(value = "select * from Account where branchNumber = :branchNumber", nativeQuery = true)
+    public List<Account> getBranchAccounts(@Param("branchNumber") int branchNumber);
 }

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -14,15 +15,16 @@ import java.util.Date;
 @Entity
 public class Customer {
     @Id
-    private String socialNumber;
+    private String socialnumber;
     private String name;
     private String address;
 
-    // https://binarywoo.tistory.com/97
+    /*// https://binarywoo.tistory.com/97
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date birthdate;
+    private Date birthdate;*/
+    private LocalDate birthdate;
     private String email;
-    private String phoneNumber;
+    private String phonenumber;
     private String job;
 
 //    @Builder

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,14 +23,20 @@ public class CustomerController {
 
     // 전체 고객 조회
     @GetMapping("/all")
-    public List<Object> getPosts() { // list 타입 Customer로 안하고 그냥 Object해도 결고 나옴.
+    public List<Customer> getPosts() { // list 타입 Customer로 안하고 그냥 Object해도 결고 나옴.
         return customerRepository.getAllCustomers();
+    }
+
+    // 이름으로 고객 정보 조회
+    @GetMapping("/name")
+    public List<Customer> getInfoByName(@RequestParam("name") String name) {
+        return customerRepository.getInfoByName(name);
     }
 
     // 전체 고객 생일 조회
     @GetMapping("/all/birthday")
     public List<Date> getPosts2() { // list 타입 Customer로 안하고 그냥 Object해도 결고 나옴.
-        return customerRepository.getAllCustomers2();
+        return customerRepository.getAllCustomersBirthday();
     }
 
     // 테스트 쿼리1

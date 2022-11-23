@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,21 +18,9 @@ public class BranchController {
     @Autowired
     BranchRepository branchRepository;
 
-    // 모든 브랜치 조회
+    // 전체 브랜치 조회
     @GetMapping("/all")
-    public List<Object> getAllAccounts() {
+    public List<Branch> getAllAccounts() {
         return branchRepository.getAllBranchs();
     }
-
-    /*// 모든 브랜치 넘버 조회
-    @GetMapping("/alli")
-    public List<Integer> getAllAccounts3() {
-        return branchRepository.getAllBranchs();
-    }
-
-    // 모든 브랜치 조회
-    @GetMapping("/alla")
-    public List<String> getAllAccounts2() {
-        return branchRepository.getAllBranchs2();
-    }*/
 }

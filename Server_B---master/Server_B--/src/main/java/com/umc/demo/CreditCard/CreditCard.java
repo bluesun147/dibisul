@@ -14,10 +14,10 @@ import java.util.Date;
 @Entity
 public class CreditCard {
     @Id
-    private int cardnumber;
-    private String socialNumber;
+    private int cardnumber; // cardNumber 이런식으로 쓰면 card_number를 찾음, 다 소문자로 써야 함.
+    private String socialnumber;
     private int accountnumber;
     private String type;
-    private double cardLimit;
-    private LocalDateTime birthdate;
+    private double cardlimit;
+    private LocalDateTime applicationdate;
 }
