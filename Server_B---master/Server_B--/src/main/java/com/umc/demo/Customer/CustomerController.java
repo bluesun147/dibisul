@@ -1,9 +1,12 @@
 package com.umc.demo.Customer;
 
+import com.umc.demo.Account.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +19,24 @@ public class CustomerController {
     CustomerRepository customerRepository;
 
     // 고객 등록
-    @PostMapping()
-    public List<Object> saveCustomer(String socialNumber, String name, String address, Date birthdate, String email, String phoneNumber, String job) {
-        return customerRepository.saveCustomer(socialNumber, name, address, birthdate, email, phoneNumber, job);
+    @PostMapping("/signin")
+    public void createCustomer(
+            @RequestParam("socialNumber") String socialNumber,
+            @RequestParam("name") String name,
+            @RequestParam("address") String address,
+            @RequestParam("birthdate") String birthdate,
+            @RequestParam("email") String email,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("job") String job) {
+        Customer c = new Customer();
+        c.setSocialnumber(socialNumber);
+        c.setName(name);
+        c.setAddress(address);
+        c.setBirthdate(LocalDate.parse(birthdate));
+        c.setEmail(email);
+        c.setPhonenumber(phoneNumber);
+        c.setJob(job);
+        customerRepository.save(c);
     }
 
     // 전체 고객 조회

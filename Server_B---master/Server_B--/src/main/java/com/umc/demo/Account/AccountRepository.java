@@ -1,21 +1,21 @@
 package com.umc.demo.Account;
 
-import com.umc.demo.Customer.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 // <Account, Integer> 부분에 Account 안쓰면 List<Account>하면 오류나서 List<Object> 이런식으로 썼음
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     // https://kitty-geno.tistory.com/118
     // 계좌 등록
-    @Query(value = "insert into Account (socialnumber, branchnumber, type, balance, cardappstatus) values (:socialNumber, :branchNumber, :type, :balance, :cardAppStatus)", nativeQuery = true)
-    public List<Customer> createAccount(
+    @Transactional
+    @Query(value = "insert into account (socialnumber, branchnumber, type, balance, cardappstatus) values (:accountNumber, :socialNumber, :branchNumber, :type, :balance, :cardAppStatus)", nativeQuery = true)
+    public int createAccount(
+            //@Param("accountNumber") int accountNumber,// accountNumber라고 하면 account_number를 찾음
             @Param("socialNumber") String socialNumber,// accountNumber라고 하면 account_number를 찾음
             @Param("branchNumber") int branchNumber,
             @Param("type") String type,
@@ -24,7 +24,7 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     );
 
     // 모든 계좌 조회
-    @Query(value = "select * from Account", nativeQuery = true)
+    @Query(value = "select * from account", nativeQuery = true)
     public List<Account> getAllAccounts();
 
     // 특정 사용자 계좌 조회
@@ -46,15 +46,15 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     // 출금
     @Transactional
     @Modifying
-    @Query(value = "update Account set balance = :result where accountNumber = :accountNumber", nativeQuery = true)
+    @Query(value = "update account set balance = :result where accountNumber = :accountNumber", nativeQuery = true)
     public void withdraw(@Param("result") double result,
                          @Param("accountNumber") int accountNumber);
 
     // 계좌에 연결된 카드 조회
-    @Query(value = "select * from CreditCard where accountNumber = :accountNumber", nativeQuery = true)
+    @Query(value = "select * from credit_card where accountnumber = :accountNumber", nativeQuery = true)
     public List<Object> getCards(@Param("accountNumber") int accountNumber);
 
     // 특정 브랜치에서 개설된 계좌 조회
-    @Query(value = "select * from Account where branchNumber = :branchNumber", nativeQuery = true)
+    @Query(value = "select * from account where branchNumber = :branchNumber", nativeQuery = true)
     public List<Account> getBranchAccounts(@Param("branchNumber") int branchNumber);
 }

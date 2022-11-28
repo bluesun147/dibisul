@@ -2,16 +2,18 @@ package com.umc.demo.Account;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Account {
     @Id
@@ -21,9 +23,9 @@ public class Account {
     private int branchnumber;
     private String type;
     private double balance;
-    @CreatedDate
+    //@CreatedDate
     private boolean cardappstatus;
-    private LocalDate opendate;
+    private LocalDateTime opendate;
 
 //    @Builder
 //    public Customer(int user_id, String email, String password, String name, String profile_img, String text) {

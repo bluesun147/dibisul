@@ -1,5 +1,7 @@
 package com.umc.demo.Account;
 
+import com.umc.demo.CreditCard.CreditCard;
+import com.umc.demo.CreditCard.CreditCardRepository;
 import com.umc.demo.Customer.Customer;
 import com.umc.demo.Transaction.Transaction;
 import com.umc.demo.Transaction.TransactionRepository;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,17 +23,36 @@ public class AccountController {
     @Autowired
     TransactionRepository transactionRepository;
 
+    @Autowired
+    CreditCardRepository creditCardRepository;
+
     // --------> 이건 그냥 jpa 쓰면 안됨??
     // 계좌 개설 --> 로그인 해야 할 수 있도록
-    @PostMapping("/signin")
-    public List<Customer> createAccount(
+    /*@PostMapping("/signin")
+    public int createAccount(
             @RequestParam("socialNumber") String socialNumber,
             @RequestParam("branchnumber") int branchnumber,
             @RequestParam("type") String type,
             @RequestParam("balance") double balance,
             @RequestParam("cardappstatus") boolean cardappstatus) {
-        // 로그인 상태면 정보 모두 있으므로 파람으로 안받고 자동으로 넣어주면 됨.
         return accountRepository.createAccount(socialNumber, branchnumber, type, balance, cardappstatus);
+    }*/
+
+    @PostMapping("/signin")
+    public void createAccount(
+            @RequestParam("socialNumber") String socialNumber,
+            @RequestParam("branchnumber") int branchnumber,
+            @RequestParam("type") String type,
+            @RequestParam("balance") double balance,
+            @RequestParam("cardappstatus") boolean cardappstatus) {
+        Account ac = new Account();
+        ac.setSocialnumber(socialNumber);
+        ac.setBranchnumber(branchnumber);
+        ac.setType(type);
+        ac.setBalance(balance);
+        ac.setCardappstatus(cardappstatus);
+        ac.setOpendate(LocalDateTime.now());
+        accountRepository.save(ac);
     }
 
     // 모든 계좌 조회
@@ -108,8 +130,8 @@ public class AccountController {
 
     // 계좌에 연결된 카드 조회
     @GetMapping("/card")
-    public List<Object> getCards(@RequestParam("accountNumber") int accountNumber) {
-        return accountRepository.getCards(accountNumber);
+    public List<CreditCard> getCards(@RequestParam("accountNumber") int accountNumber) {
+        return creditCardRepository.getCards(accountNumber);
     }
 
     // 특정 브랜치에서(branchNumber 사용) 개설된 계좌 조회

@@ -21,7 +21,7 @@ public class TransactionController {
         return transactionRepository.getAccountTrans(accountNumber);
     }
 
-    // 거래 내역 작성
+    // 거래 내역 작성 // 쓰이는곳 없음. accountController에서 trRepository.save 쓰고있음
     @PostMapping("/")
     public void putTrans(
             @RequestParam("accountNumber") int accountNumber,
